@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
+import { genResponse } from "@/utils/ResponseGenerator";
 import { sendVerificationEmail } from "@/utils/sendVerificationEmail";
 import bcrypt from "bcryptjs";
 
@@ -14,11 +15,11 @@ export async function POST(request: Request){
         const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
         
         if(existingUserVerifiedByUsername){
-            return Response.json({ success: false, message: "Username already taken"}, {status: 400});
+            return genResponse(false, "Username already taken", 400);
         }
         if(existingUserByEmail){
             if(existingUserByEmail.isVerified){
-                return Response.json({success: false, message: "User already exists with this email"},{status: 400});
+                return genResponse(false, "User already exists with this email", 400);
             }else{
                 const hashedPassword = await bcrypt.hash(password, 10)
                 existingUserByEmail.password = hashedPassword;
@@ -48,14 +49,12 @@ export async function POST(request: Request){
             email, username, verifyCode
         );
         if(!emailResponse.success){
-            return Response.json({success: false, message: emailResponse.message},{status: 500});
+            return genResponse(false, emailResponse.message, 500);
         }
-        return Response.json({success: true, message: "User registered successfully! Please verify Email"},{status: 201});
+        return genResponse(true, "User registered successfully! Please verify Email", 201);
     } catch (err) {
         console.error('Error registering user', err);
-        return Response.json({
-            success: false,
-            message: "Error registering user"
-        },{status: 500});
+        const errorMessage = err instanceof Error ? err.message : "Unknown error";
+        return genResponse(false, "Error Registering user", 500, null, errorMessage);
     }
 }
