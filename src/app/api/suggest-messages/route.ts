@@ -6,6 +6,7 @@ export async function POST(req: Request) {
     var ai_response;
     const randomSeed = Math.floor(Math.random() * 10000);
     try {
+        // groq logged in by personal email(mlme@sdss) - via google
         ai_response = await generateText({
             model: groq('gemma2-9b-it'),
             prompt: "Create a JSON object with three engaging open-ended questions for an anonymous social messaging platform like Qooh.me. The questions should be suitable for a diverse audience and not too personal, fostering curiosity. For example, format the output as: { \"questions\": [ \"What's a hobby you've recently started?\", \"If you could have dinner with any historical figure, who would it be?\", \"What's a simple thing that makes you happy?\"]}. Provide only the JSON result with properly formatted brackets and braces.",
