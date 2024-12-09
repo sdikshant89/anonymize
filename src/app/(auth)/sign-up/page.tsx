@@ -77,6 +77,7 @@ function page() {
         title: 'Success',
         description: resp.data.message,
       });
+      // Once submitted successfully, the router redirects to the verify page of that particular user.
       router.replace(`/verify/${username}`);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;

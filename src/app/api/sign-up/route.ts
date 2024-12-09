@@ -21,11 +21,18 @@ export async function POST(request: Request){
             if(existingUserByEmail.isVerified){
                 return genResponse(false, "User already exists with this email", 400);
             }else{
-                const hashedPassword = await bcrypt.hash(password, 10)
-                existingUserByEmail.password = hashedPassword;
-                existingUserByEmail.verifyCode = verifyCode;
-                existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
-                await existingUserByEmail.save();
+                const newUsernameUserExists = await UserModel.findOne({username});
+                if(newUsernameUserExists){
+                    return genResponse(false, "Username already taken", 400);
+                }else{
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    // Changing the existing (non verified) user's username and password
+                    existingUserByEmail.username = username;
+                    existingUserByEmail.password = hashedPassword;
+                    existingUserByEmail.verifyCode = verifyCode;
+                    existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
+                    await existingUserByEmail.save();
+                }
             }
         }
         else{
