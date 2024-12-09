@@ -81,10 +81,9 @@ function page() {
       router.replace(`/verify/${username}`);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
-      var errorMessage = axiosError.response?.data.message;
       toast({
         title: 'Signup Failed',
-        description: errorMessage,
+        description: axiosError.response?.data.message,
         variant: 'destructive',
       });
     } finally {
