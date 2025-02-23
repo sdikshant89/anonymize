@@ -22,7 +22,7 @@ function VerifyAccount() {
   const router = useRouter();
 
   // Helps to access the url path parameters
-  // Because we get username from url, check onsubmit function in sign-up page.tsx
+  // Cause we get username from url, check onsubmit function -> sign-up page.tsx
   const params = useParams<{ username: string }>();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof verifySchema>>({
@@ -62,7 +62,7 @@ function VerifyAccount() {
           <h1 className="text-3xl font-extrabold tracking-tight lg:text:5xl mb-6">
             Verify by OTP
           </h1>
-          <p className="mb-4">Verify your account by OTP, check email</p>
+          <p className="mb-4">Verify your account using OTP sent in the mail.</p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
