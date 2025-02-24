@@ -21,10 +21,10 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { Message } from '@/model/User';
+import { ApiResponse } from '@/types/ApiResponse';
+import axios from 'axios';
 import { X } from 'lucide-react';
 import { Button } from './ui/button';
-
-const handleDelete = () => {};
 
 type MessageCardProps = {
   message: Message;
@@ -32,7 +32,14 @@ type MessageCardProps = {
 };
 
 const MessageCards = ({ message, onMessageDelete }: MessageCardProps) => {
-  const toast = useToast();
+  const { toast } = useToast();
+  const handleDelete = async () => {
+    const response = await axios.delete<ApiResponse>(
+      `/api/delete-message/${message._id}`
+    );
+    toast({ title: response.data.message });
+    onMessageDelete(message._id as string);
+  };
   return (
     <Card>
       <CardHeader>
